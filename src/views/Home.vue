@@ -1,18 +1,85 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div class="container">
+        <Loader class="loading" v-if="loading"/>
+        <ul class="allposts">
+            <li v-for="shoe in shoes" :key="shoe.id" :value="shoe.id">
+                <router-link :key="shoe.id" :to="{ name: 'Add', params: { id: shoe.id }, }" class="shoes-side">
+                    <div class="shoes">
+                        <figure class="image">
+                            <img :src="shoe.image" alt="">
+                        </figure>
+                        <a class="post-cost">
+                            <p>{{ shoe.name }}</p>
+                        </a>
+                        <div class="posts">
+                            <h5>{{ shoe.cost }}$</h5>
+                        </div>   
+                    </div>
+                </router-link>
+            </li>
+        </ul>
+        
+    </div>
 </template>
-
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import Loader from '../components/Loaders'
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
+    data: () => ({
+        shoes: [],
+        loading: true
+    }),
+    async mounted() {
+        this.shoes = await this.$store.dispatch('fetchShoes')
+        this.loading = false
+    },
+    computed: {
+        
+    },
+    components: {
+        Loader
+    }
+    
 }
 </script>
+<style scoped>
+    .allposts {
+        padding-left: 0px;
+        margin-top: 40px;
+    }
+    .allposts li {
+        display: inline;
+    }
+    .image img {
+        width: 300px;
+        height: 340px;
+    }
+    .shoes-side {
+        display: inline-flex;
+        margin-top: 20px;
+    }
+    .shoes {
+        margin-left: 55px;
+    }
+    .shoes a {
+        display: flex;
+    }
+    .post-cost h5 {
+        margin-left: 80px;
+        position:relative;
+        right: 0;
+    }
+    .post-cost {
+        text-decoration: none;
+        display: inline-flex;
+        color: black;
+    }
+    .posts {
+        margin-top: -42px;
+        float: right;
+    }
+    .loading {
+       margin-left: 46%;
+       margin-top: 150px;
+       margin-bottom: 150px;
+    }
+</style>
