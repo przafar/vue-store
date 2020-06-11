@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuelidate from 'vuelidate'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
@@ -11,6 +12,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 
+Vue.use(Vuelidate)
 Vue.use(VModal)
 Vue.use(BootstrapVue)
 Vue.use(VueResource)

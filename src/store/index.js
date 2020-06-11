@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from 'firebase/app'
-import state from './state'
-import mutations from './mutations'
-import getters from './getters'
+
 
 
 
@@ -11,10 +9,31 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    products: [],
     cart: [],
+    products: []
   },
-  mutations: {},
+  
+  mutations: {
+    addToCart(state, product) {
+      let isProductExists = false;
+      if (state.cart.length) {
+        state.cart.map(function (item) { 
+          if (item.shown === product.shown) {
+            isProductExists = true;
+            item.quantity++
+          }
+        })
+        if (!isProductExists) {
+          return state.cart.push(product)
+        }
+      } else {
+        return state.cart.push(product)
+      }
+    },
+    loadProducts(state, item) {
+      state.products = item
+    }
+  },
   actions: {
     async fetchShoes({commit}) {
         const products = (await firebase.database().ref(`/shoes/men`).once('value')).val()
@@ -29,7 +48,6 @@ export default new Vuex.Store({
             id: key
           })
           commit('loadProducts', products)
-          
         })
         return cats  
     },
@@ -42,56 +60,32 @@ export default new Vuex.Store({
         throw e
       }
     },
-    async fetchBasketById({commit}, id) {
-      try{
-        const shoe = (await firebase.database().ref(`/shoes/basket`).child(id).once('value')).val() || {}
-        return {...shoe, id}
-      } catch(e) {
-        commit('setError', e)
-        throw e
-      }
-    },
-    async removeCart({commit}, id ){
+    async updateProduct({commit}, {id,  cost, image, name, front}) {
       try {
-        const products = (await firebase.database().ref(`/shoes/men`).once('value')).child(id)
-        products.remove()
-      } catch (e) {
-        commit('setError', e)
-        throw e
-      }
-    },
-    async basketShoes({commit}) {
-      try{
-        const basketShoes = (await firebase.database().ref(`/shoes/basket`).once('value')).val() 
-        const ties = []
-        Object.keys(basketShoes).forEach(key => {
-          ties.push({
-            name: basketShoes[key].name,
-            cost: basketShoes[key].cost,
-            image: basketShoes[key].image,
-            quantity: basketShoes[key].quantity,
-            id: key
-          })
-          return ties 
-        })
-        return ties 
-      } catch(e) {
-        commit('setError', e)
-        throw e
-      }
-    },
-    async updateShoes({commit}, {id, quantity, cost, image, name}) {
-      try {
-        await firebase.database().ref('/shoes/basket').child(id).update({quantity, cost, image, name})
+        await firebase.database().ref('/shoes/men').child(id).update({cost, image, name, front})
       } catch (e) {
         commit('setError', e)
         throw e
       } 
-    } 
+    },
+    async createProduct({commit}, {name, image, front, cost}) {
+      try {
+        const product = await firebase.database().ref('/shoes/men').push({name, image, front, cost})
+        return {name, image, front, cost, id: product.key}
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      } 
+    },
+    
   },
-  modules: {
-    state, mutations, getters
-  },
-  getters: {}
+  getters: {
+    PRODUCTS: state => {
+      return state.cart
+    },
+    getTodoById: (state) => (id) => {
+      return state.cart.find(todo => todo.id === id)
+    }
+  }
 })
  

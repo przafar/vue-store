@@ -1,28 +1,33 @@
 <template>
-    <div class="container">
-        <Loader class="loading" v-if="loading"/>
-        <ul class="allposts">
-            <li v-for="shoe in shoes" :key="shoe.id" :value="shoe.id">
-                <router-link :key="shoe.id" :to="{ name: 'Add', params: { id: shoe.id }, }" class="shoes-side">
-                    <div class="shoes">
-                        <figure class="image">
-                            <img :src="shoe.image" alt="">
-                        </figure>
-                        <a class="post-cost">
-                            <p>{{ shoe.name }}</p>
-                        </a>
-                        <div class="posts">
-                            <h5>{{ shoe.cost }}$</h5>
-                        </div>   
-                    </div>
-                </router-link>
-            </li>
-        </ul>
-        
+    <div> 
+        <Menubar/>
+        <div class="container">
+            <div class="row">
+                <Loader class="loading" v-if="loading"/>
+                <ul class="allposts">
+                    <li v-for="shoe in shoes" :key="shoe.id" :value="shoe.id">
+                        <router-link :key="shoe.id" :to="{ name: 'Add', params: { id: shoe.id }, }" class="shoes-side">
+                            <div class="shoes">
+                                <figure class="image">
+                                    <img :src="shoe.image" alt="">
+                                </figure>
+                                <a class="post-cost">
+                                    <p>{{ shoe.name }}</p>
+                                </a>
+                                <div class="posts">
+                                    <h5>{{ shoe.cost }}$</h5>
+                                </div>   
+                            </div>
+                        </router-link>
+                    </li>
+                </ul>
+            </div>
+        </div>   
     </div>
 </template>
 <script>
 import Loader from '../components/Loaders'
+import Menubar from '../components/menuBar'
 export default {
     data: () => ({
         shoes: [],
@@ -36,7 +41,7 @@ export default {
         
     },
     components: {
-        Loader
+        Loader, Menubar
     }
     
 }
@@ -82,4 +87,6 @@ export default {
        margin-top: 150px;
        margin-bottom: 150px;
     }
+    
+    
 </style>

@@ -1,56 +1,65 @@
 <template>
-  <div class="box">
-    <div class="basket">
-      <ul class="modal-post" v-for="(shoe, index) in shoes" :key="index" :value="shoe.id">
-        <li class="modal-image">
-          <img :src="shoe.image" alt="">
-        </li>
-        <li class="modal-information">
-          <h5>{{ shoe.name }}</h5>
-          <p>{{ shoe.cost }}$ Quantity: <b>{{ shoe.quantity }}</b></p>
-          <select class="select" v-model="shoe.quantity">
-            <option :key="quantity" v-for="quantity in quantityArray" :value="quantity">{{ quantity }}</option>
-          </select>
-          <h5>Become a Nike Member for fast and free shipping</h5>
-        </li>
-        <li class="remove" @click="removeShoes(index)">
-          <button class="btn">
-            <i>
-              <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
-                <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd"/>
-              </svg>
-            </i>
-          </button>
-        </li>
-      </ul>
+  <div>
+    <Menubar/>
+    <div class="container">
       
-    </div>
-    <div class="value">
-      <p>Summary</p>
-      <p>Do you have a Promo Code?</p>
-      <p>Quantity: {{ quantity }}</p>
-      <p>Estimated Shipping & Handling</p>
-      <hr>
-      <h5>Total: {{ total }}$</h5>
-      <hr>
-      <button class="pay">Checout</button>
+      <div class="box row">
+        <div class="basket col-md-8">
+          <ul class="modal-post" v-for="(shoe, index) in shoes" :key="index" :value="shoe.id">
+            <li class="modal-image">
+              <img :src="shoe.image" alt="">
+            </li>
+            <li class="modal-information">
+              <h5>{{ shoe.name }}</h5>
+              <p>{{ shoe.cost }}$ Quantity: <b>{{ shoe.quantity }}</b></p>
+              <h6>{{ shoe.shown }}</h6>
+              <div class="options">
+                <p>Quantity</p>
+                <select class="select" v-model="shoe.quantity">
+                  <option :key="quantity" v-for="quantity in quantityArray" :value="quantity">{{ quantity }}</option>
+                </select>
+                <p>Size</p>
+                <select v-model="shoe.size">
+                  <option :value="size" v-for="size in sizes" :key="size.id">{{ size }}</option>
+                </select>
+              </div>
+            </li>
+            <li class="remove" @click="removeShoes(index)">
+              <button class="btn">
+                <i>
+                  <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd"/>
+                  </svg>
+                </i>
+              </button>
+            </li>
+          </ul> 
+        </div>
+      <div class="value col-md-4 text-left">
+          <p>Summary</p>
+          <p>Do you have a Promo Code?</p>
+          <p>Quantity: {{ quantity }}</p>
+          <p>Estimated Shipping & Handling</p>
+          <hr>
+          <h5>Total: {{ total }}$</h5>
+          <hr>
+          <button class="pay">Checout</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
-
+import Menubar from '../components/menuBar'
 export default {
- 
   data: () => ({
-    shoes: [],
-    shoe: [],
     selected: [],
     quantityArray: [],
-    cart: []
+    picked: '',
+    sizes: [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 11]
   }),
-  async mounted() {
-    this.shoes = await this.$store.dispatch('basketShoes')
+  mounted() {
     for (let i = 1; i <= 10; i++) {
       this.quantityArray.push(i);
     }
@@ -70,14 +79,18 @@ export default {
           quantity += e.quantity
       });
       return quantity
+    },
+    shoes() {
+      return this.$store.getters.PRODUCTS;
     }
   },
   methods: {
     async removeShoes(id) {
-      
       this.shoes.splice(id, 1)
-      await this.$store.dispatch('removeCart', id)
     }
+  },
+  components: {
+    Menubar
   }
   
 }
@@ -86,6 +99,7 @@ export default {
 <style scoped>
   .box {
     display: flex;
+    margin-top: 30px;
   }
   .box ul{
     display: flex;
@@ -99,7 +113,12 @@ export default {
   }
   .modal-information {
     margin-left: 40px;
-    padding-top: 25px;
+    padding-top: ;
+    display: inline-block;
+
+  }
+  .modal-information p {
+    margin-bottom: 5px;
   }
   .modal-information h5 {
     font-size: 18px;
@@ -109,7 +128,6 @@ export default {
   .remove {
     margin-left: 30px;
     padding-top: 20px;
-
   }
   .remove i {
     font-size: 22px;
@@ -122,7 +140,7 @@ export default {
     border: none;
   }
   .value {
-    margin-left: 230px;
+    padding-left: 30px;
   }
   .pay {
     width: 280px;
@@ -130,5 +148,23 @@ export default {
     border-radius: 50px;
     border: 0.5px solid rgb(122, 122, 122);
     margin-bottom: 21px;
+  }
+  .options {
+    display: flex;
+  }
+  .options p {
+    color: #757575;
+    margin-bottom: 0;
+    margin-right: 2px;
+  }
+  .options select {
+    border: none;
+    height: 22px;
+    color: #757575;
+    margin-right: 20px;
+  }
+  .modal-information h6 {
+    color: #757575;
+    font-weight: 400;
   }
 </style>
