@@ -6,6 +6,7 @@
       </router-link>
         <Counter v-bind:quantity="updated"/>
     </ul>
+    <modal-search />
     <router-view @created="updatedCounter"></router-view>
     <footer>
       <div class="container">
@@ -27,19 +28,21 @@
 </template>
 <script>
 import Counter from './components/counter'
+import ModalSearch from './components/ModalSearch'
+
   export default {
     name: 'App',
     data: () => ({
     shoes: [],
     }),
     components: {
-      Counter
+      Counter, ModalSearch
     },
     computed: {
       updated() {
         return this.$store.getters.PRODUCTS.length
       }
-    }
+    },
   }
 </script>
 
@@ -80,7 +83,7 @@ import Counter from './components/counter'
     display: inline-block;
   }
   .info {
-    
+
     margin-top: 20px;
     margin-bottom: 10px;
     font-size: 13px;

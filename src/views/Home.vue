@@ -1,8 +1,9 @@
 <template>
     <div> 
-        <Menubar/>
+        <Menubar class="absolute"/>
         <div class="container">
             <div class="row">
+                
                 <Loader class="loading" v-if="loading"/>
                 <ul class="allposts">
                     <li v-for="shoe in shoes" :key="shoe.id" :value="shoe.id">
@@ -28,6 +29,7 @@
 <script>
 import Loader from '../components/Loaders'
 import Menubar from '../components/menuBar'
+
 export default {
     data: () => ({
         shoes: [],
@@ -87,6 +89,7 @@ export default {
        margin-top: 150px;
        margin-bottom: 150px;
     }
+    
     
     
 </style>

@@ -7,6 +7,10 @@ import store from './store'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueResource from 'vue-resource'
 import VModal from 'vue-js-modal'
+import VueFuse from 'vue-fuse'
+import VBodyScrollLock from 'v-body-scroll-lock'
+
+
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -14,6 +18,8 @@ import 'firebase/database'
 
 Vue.use(Vuelidate)
 Vue.use(VModal)
+Vue.use(VueFuse)
+Vue.use(VBodyScrollLock)
 Vue.use(BootstrapVue)
 Vue.use(VueResource)
 Vue.use(IconsPlugin)

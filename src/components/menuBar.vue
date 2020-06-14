@@ -14,11 +14,12 @@
   .gender li {
     display: inline-flex;
     text-align: center;
-    margin-right: 50px;
+    margin-left: 40px;
     cursor: pointer;
   }
   .gender {
     text-align: center;
+    margin-left: 50px;
   }
   .borderli {
     border-top: 0.5px solid #b1b1b1;
