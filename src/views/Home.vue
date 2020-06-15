@@ -89,6 +89,11 @@ export default {
        margin-top: 150px;
        margin-bottom: 150px;
     }
+    @media screen and (min-width: 370px) and (max-width: 1200px) {
+        .shoes {
+            margin-left: 30px;
+        }
+    }
     
     
     

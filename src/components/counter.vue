@@ -59,4 +59,12 @@ export default {
     position: relative;
     
   }
+  @media screen and (min-width: 370px) and (max-width: 1200px) {
+    .store {
+      position: absolute;
+      right: 0;
+      top: 66px;
+      padding-right: 5px;
+    }
+  }
 </style>

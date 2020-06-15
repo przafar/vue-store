@@ -1,6 +1,14 @@
 <template>
   <div class="relative">
     <div class="modal-search relative">
+      <label class="searchbtn">
+        <i>
+          <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+            <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+          </svg>
+        </i>
+      </label>
       <input type="text"
              placeholder="Search"
              class="input-search outline-none "
@@ -27,7 +35,7 @@
           <div class="col-md-8 mates">
             <h4>Top Suggestions</h4>
             <li @mousedown.prevent="searchVisibleResult = true" v-for="(shoe, index) in filteredBlogs" :key="index">
-              <a :href="shoe.id" class="shoe-design" :key="shoe.id">
+              <router-link @click.native="$router.go()" :to="{name: 'Add', params: { id: shoe.id }}" class="shoe-design" :key="shoe.id">
                 <div class="img-shoe">
                   <img :src="shoe.image" alt="">
                 </div>
@@ -35,7 +43,7 @@
                   <h6>{{ shoe.name }}</h6>
                   <p>{{ shoe.cost }}$</p>
                 </div>
-              </a>
+              </router-link>
             </li>
           </div>
           <div class="col-md-4 rates">
@@ -55,7 +63,8 @@ export default {
     shoes: [],
     loading: true,
     results: [],
-    filter: []
+    filter: [],
+    url: 'add/'
   }),
   async mounted() {
     this.shoes = await this.$store.dispatch('fetchShoes')
@@ -96,19 +105,20 @@ export default {
     outline: none;
     width: 200px;
     height: 40px;
-    padding-left: 15px;
+    padding-left: 25px;
     float: right;
     margin-top: 17px;
     margin-right: 20px;
+
   }
   .search-text {
     position: absolute;
     background-color: #f7f7f7;
     border: 1px solid black;
     right: 0;
-    top: 140px;
+    top: 141px;
     width: 82%;
-    height: 74.5%;
+    height: 100%;
     margin-bottom: 20px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     z-index: 10;
@@ -120,7 +130,7 @@ export default {
   }
   .rates {
     background-color: #e6e6e6;
-    height: 428px;
+    height: 800px;
   }
   .mates {
     height: 400px;
@@ -159,6 +169,47 @@ export default {
     border: none;
     background-color: white;
     outline: none;
+  }
+  .searchbtn {
+    position: absolute;
+    top: 23px;
+    right: 198px;
+  }
+  .searchbtn i {
+    font-family: 800;
+    color: rgb(99, 98, 98);
+    font-size: 14px;
+  }
+  
+  @media screen and (min-width: 370px) and (max-width: 1200px) {
+    .modal-search {
+      position: absolute;
+      top: 0;
+      right: 70px;
+    }
+    .searchbtn {
+      position: absolute;
+      display: block;
+      border: none;
+      background-color: white;
+      left: 8px;
+    }
+    .input-search {
+      width: 180px;
+    }
+    .input-button {
+      right: 25px;
+    }
+    .search-text {
+      top: 50px;
+    }
+    .rates {
+      display: none;
+    }
+    .rates p {
+      font-size: 10px;
+    }
+    
   }
   
 </style>

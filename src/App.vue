@@ -6,7 +6,7 @@
       </router-link>
         <Counter v-bind:quantity="updated"/>
     </ul>
-    <modal-search />
+    <modal-search :key="$route.fullPath" />
     <router-view @created="updatedCounter"></router-view>
     <footer>
       <div class="container">
@@ -83,7 +83,6 @@ import ModalSearch from './components/ModalSearch'
     display: inline-block;
   }
   .info {
-
     margin-top: 20px;
     margin-bottom: 10px;
     font-size: 13px;
@@ -100,6 +99,18 @@ import ModalSearch from './components/ModalSearch'
     text-decoration: none;
     margin-left: 30px;
     font-size: 13px;
+  }
+  @media screen and (min-width: 370px) and (max-width: 1200px) {
+    .header {
+      margin-left: -25px;
+    }
+    .guide {
+      text-align: left;
+    }
+    footer li {
+      display: inline-flex;
+    }
+    
   }
   
   

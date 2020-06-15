@@ -8,9 +8,13 @@
               <div class="addside row">
                 <li class="col-md-4 addphoto" >
                   <img :src="shoe.image" alt="">
+                  <img :src="shoe.back" alt="">
+                  <img :src="shoe.photo" alt="">
                 </li>
                 <li class="col-md-4 addphoto">
                   <img :src="shoe.front" alt="">
+                  <img :src="shoe.side" alt="">
+                  <img :src="shoe.pic" alt="">
                 </li>
                 <li class="col-md-4 addinformation">
                   <h6>Men's Running Shoe</h6>
@@ -18,7 +22,7 @@
                   <h5>{{ shoe.cost }}$</h5> <br>
                   <div class="row categories">            
                     <li v-for="cat in categories" :key="cat.id">
-                      <img @click="updateProduct(cat.image, cat.front, cat.shown)" :src="cat.image" alt="">
+                      <img @click="updateProduct(cat.image, cat.front, cat.shown, cat.pic, cat.photo, cat.back, cat.side )" :src="cat.image" alt="">
                     </li>
                   </div>
                   <div>
@@ -37,7 +41,8 @@
                   </div>
                   <Select v-bind:basket="basket"/>
                   <div class="shown">
-                    <p>Shown: <span>{{ shoe.shown }}</span></p>  
+                    <p>Shown: <span>{{ shoe.shown }}</span></p>
+                    <h6>{{ shoe.about }}</h6>  
                   </div>
                   <button v-on:click="submitHandler" type="submit" class="btn add-cart">Add to Cart</button>
                 </li>
@@ -65,9 +70,8 @@ export default {
     picked: '',
     sizes: [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 11],
     categories: [],
-    selectedVariant: 2
-   
-    
+    selectedVariant: 1
+ 
   }),     
   async mounted() {
     const id = this.$route.params.id
@@ -104,13 +108,17 @@ export default {
         id: this.shoe.id
       }
       this.$store.commit('addToCart', addShoes)
-      return this.updated+1
+      this.$store.commit('saveData')
     },
     
-    updateProduct(image, front, shown) {
+    updateProduct(image, front, shown, photo, back, side, pic) {
       this.shoe.image = image
       this.shoe.front = front
       this.shoe.shown = shown
+      this.shoe.back = back
+      this.shoe.side = side
+      this.shoe.photo = photo
+      this.shoe.pic = pic
     }
 
     // submitHandler() {
@@ -155,6 +163,7 @@ export default {
   }
   .addphoto img {
     width: 320px;
+    margin-bottom: 35px;
   }
   .view {
     margin-top: 40px;
@@ -168,7 +177,7 @@ export default {
   .add-cart {
     margin-top: 20px;
     margin-bottom: 15px;
-    width: 260px;
+    width: 340px;
     height: 58px;
     border-radius: 30px;
     background: black;
@@ -255,6 +264,15 @@ export default {
   }
   .shown span {
     font-weight: 400;
+  }
+  .shown h6 {
+    margin-top: 30px;
+    margin-bottom: 30px;
   } 
+  @media screen and (min-width: 370px) and (max-width: 1200px) {
+    ul {
+      padding: 0 15px;
+    }
+  }
   
 </style>

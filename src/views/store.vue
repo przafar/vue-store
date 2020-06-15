@@ -24,7 +24,7 @@
                 </select>
               </div>
             </li>
-            <li class="remove" @click="removeShoes(index)">
+            <li class="remove" @click="$store.commit('removeFromCart', item)">
               <button class="btn">
                 <i>
                   <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -85,9 +85,7 @@ export default {
     }
   },
   methods: {
-    async removeShoes(id) {
-      this.shoes.splice(id, 1)
-    }
+
   },
   components: {
     Menubar
@@ -113,7 +111,7 @@ export default {
   }
   .modal-information {
     margin-left: 40px;
-    padding-top: ;
+  
     display: inline-block;
 
   }
@@ -141,6 +139,7 @@ export default {
   }
   .value {
     padding-left: 30px;
+    margin-bottom: 103px;
   }
   .pay {
     width: 280px;

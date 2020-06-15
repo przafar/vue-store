@@ -6,10 +6,11 @@ import firebase from 'firebase/app'
 
 
 Vue.use(Vuex)
+let cart = window.localStorage.getItem('cart')
 
 export default new Vuex.Store({
   state: {
-    cart: [],
+    cart: cart ? JSON.parse(cart) : [],
     products: []
   },
   
@@ -25,13 +26,24 @@ export default new Vuex.Store({
         })
         if (!isProductExists) {
           return state.cart.push(product)
+          
         }
       } else {
         return state.cart.push(product)
+
       }
+      this.commit('saveData')
     },
     loadProducts(state, item) {
       state.products = item
+    },
+    saveData(state) {
+      window.localStorage.setItem('cart', JSON.stringify(state.cart)) 
+    },
+    removeFromCart(state, item) {
+      let index = state.cart.indexOf(item);
+      state.cart.splice(index, 1)
+      this.commit('saveData')
     }
   },
   actions: {
