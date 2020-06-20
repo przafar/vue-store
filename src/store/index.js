@@ -11,7 +11,7 @@ let cart = window.localStorage.getItem('cart')
 export default new Vuex.Store({
   state: {
     cart: cart ? JSON.parse(cart) : [],
-    products: []
+    products: [],
   },
   
   mutations: {
@@ -37,6 +37,9 @@ export default new Vuex.Store({
     loadProducts(state, item) {
       state.products = item
     },
+    loadCommit(state, item) {
+      state.comment = item
+    },
     saveData(state) {
       window.localStorage.setItem('cart', JSON.stringify(state.cart)) 
     },
@@ -44,7 +47,8 @@ export default new Vuex.Store({
       let index = state.cart.indexOf(item);
       state.cart.splice(index, 1)
       this.commit('saveData')
-    }
+    },
+
   },
   actions: {
     async fetchShoes({commit}) {
@@ -89,6 +93,25 @@ export default new Vuex.Store({
         throw e
       } 
     },
+    async createComment({commit}, {name, rate, message, date, id}) {
+      try {
+        const comment = await firebase.database().ref('/shoes/men').child(id + '/comment').push({name, message, rate, date})
+        return {...comment, name, message, rate, date, id}
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      } 
+    },
+    async fetchComment({commit}, id) {
+      try {
+        const comment = (await firebase.database().ref('/shoes/men').child(id + '/comment').once('value')).val() || {}
+        return Object.keys(comment).map(key => ({...comment[key], id: key}))
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      } 
+    },
+    
     
   },
   getters: {
@@ -97,7 +120,8 @@ export default new Vuex.Store({
     },
     getTodoById: (state) => (id) => {
       return state.cart.find(todo => todo.id === id)
-    }
+    },
+
   }
 })
  

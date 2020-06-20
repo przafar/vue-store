@@ -45,6 +45,16 @@
                     <h6>{{ shoe.about }}</h6>  
                   </div>
                   <button v-on:click="submitHandler" type="submit" class="btn add-cart">Add to Cart</button>
+                  <Reviews v-bind:comments="reviews" />
+                  <!-- <Paginate 
+                            :page-count="pageCount"
+                            :click-handler="pageChangeHandler"
+                            :prev-text="'Prev'"
+                            :next-text="'Next'"
+                            :container-class="'pagination'"
+                            :page-class="'page-item'"
+        
+                  /> -->
                 </li>
                 <div class="view">
                   <p>The Nike Air Force 1 GORE-TEX Losaew retools the classic Air Force 1 with a street-approved design that meets the standards of GORE-TEX waterproof technology. It features water-wicking flat laces, a GORE-TEX bootie and GORE-TEX branding on the heel.</p>
@@ -60,8 +70,13 @@
 <script>
 import Select from '../components/select'
 import Menubar from '../components/menuBar'
+import Reviews from '../components/Reviews'
+
+
+
 export default {
   name: 'Add',
+
   data: () => ({
     shoe: [],
     selected: [],
@@ -70,13 +85,14 @@ export default {
     picked: '',
     sizes: [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 11],
     categories: [],
-    selectedVariant: 1
- 
+    selectedVariant: 1,
+    reviews: [],
+    items: []
   }),     
   async mounted() {
     const id = this.$route.params.id
     this.shoe = await this.$store.dispatch('fetchShoesById', id)
-    // this.basket = await this.$store.getters.getTodoById(this.shoe.id)
+    this.reviews = await this.$store.dispatch('fetchComment', id)
     this.categories = this.shoe.categoris
     for (let i = 1; i <= 10; i++) {
       this.quantityArray.push(i);
@@ -84,17 +100,22 @@ export default {
     if (this.$props.basket.quantity > 1) {
       this.selected = this.$props.basket.quantity;
     }
-    // this.basket = await this.$store.getters.getTodoById(this.shoe.id)
-    // this.basket = await this.$store.dispatch('fetchBasketById', id)
-    // this.shoes = await this.$store.dispatch('basketShoes') 
+
+    
+   
+    
+   
   },
+
   computed: {
     updated() {
       return this.$store.getters.PRODUCTS.length
     },
     basket() {
       return this.$store.getters.getTodoById(this.shoe.id)
-    }
+    },
+    
+    
   },
   methods: {
     submitHandler() {
@@ -109,6 +130,7 @@ export default {
       }
       this.$store.commit('addToCart', addShoes)
       this.$store.commit('saveData')
+     
     },
     
     updateProduct(image, front, shown, photo, back, side, pic) {
@@ -119,6 +141,9 @@ export default {
       this.shoe.side = side
       this.shoe.photo = photo
       this.shoe.pic = pic
+    },
+     pageChangeHandler() {
+       
     }
 
     // submitHandler() {
@@ -148,7 +173,7 @@ export default {
     // },
   },
   components: {
-    Menubar, Select,
+    Menubar, Select, Reviews, 
   }
 }
 

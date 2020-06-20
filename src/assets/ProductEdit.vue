@@ -43,6 +43,58 @@
           >Please provide a valid URL</span>
           </div>
           <div class="form-group">
+            <label for="exampleInputPassword1">Third Image</label>
+            <input type="text" 
+                  class="form-control"
+                  v-model="front"
+                  :class="{invalid: ($v.front.$dirty && !$v.front.required)}"
+                  placeholder="Only URL" 
+            >
+            <span 
+            class="helper-text invalid text-danger"
+            v-if="$v.front.$dirty && !$v.front.required"
+          >Please provide a valid URL</span>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Fourth Image</label>
+            <input type="text" 
+                  class="form-control"
+                  v-model="front"
+                  :class="{invalid: ($v.front.$dirty && !$v.front.required)}"
+                  placeholder="Only URL" 
+            >
+            <span 
+            class="helper-text invalid text-danger"
+            v-if="$v.front.$dirty && !$v.front.required"
+          >Please provide a valid URL</span>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Fifth Image</label>
+            <input type="text" 
+                  class="form-control"
+                  v-model="front"
+                  :class="{invalid: ($v.front.$dirty && !$v.front.required)}"
+                  placeholder="Only URL" 
+            >
+            <span 
+            class="helper-text invalid text-danger"
+            v-if="$v.front.$dirty && !$v.front.required"
+          >Please provide a valid URL</span>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Sixth Image</label>
+            <input type="text" 
+                  class="form-control"
+                  v-model="front"
+                  :class="{invalid: ($v.front.$dirty && !$v.front.required)}"
+                  placeholder="Only URL" 
+            >
+            <span 
+            class="helper-text invalid text-danger"
+            v-if="$v.front.$dirty && !$v.front.required"
+          >Please provide a valid URL</span>
+          </div>
+          <div class="form-group">
             <label for="exampleInputPassword1">Name Product</label>
             <input type="text"
                     class="form-control"

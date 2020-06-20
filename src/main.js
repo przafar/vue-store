@@ -9,6 +9,8 @@ import VueResource from 'vue-resource'
 import VModal from 'vue-js-modal'
 import VueFuse from 'vue-fuse'
 import VBodyScrollLock from 'v-body-scroll-lock'
+import StarRating from 'vue-star-rating'
+import Paginate from 'vuejs-paginate'
 
 
 
@@ -18,11 +20,13 @@ import 'firebase/database'
 
 Vue.use(Vuelidate)
 Vue.use(VModal)
+Vue.use(StarRating)
 Vue.use(VueFuse)
 Vue.use(VBodyScrollLock)
 Vue.use(BootstrapVue)
 Vue.use(VueResource)
 Vue.use(IconsPlugin)
+Vue.component('Paginate', Paginate)
 Vue.config.productionTip = false
 
 
