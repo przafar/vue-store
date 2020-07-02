@@ -5,6 +5,7 @@ import firebase from 'firebase/app'
 
 
 
+
 Vue.use(Vuex)
 let cart = window.localStorage.getItem('cart')
 
@@ -12,6 +13,8 @@ export default new Vuex.Store({
   state: {
     cart: cart ? JSON.parse(cart) : [],
     products: [],
+    info: {},
+    error: null
   },
   
   mutations: {
@@ -48,9 +51,45 @@ export default new Vuex.Store({
       state.cart.splice(index, 1)
       this.commit('saveData')
     },
+    setInfo(state, info) {
+      state.info = info
+    },
+    clearInfo(state) {
+      state.info = {}
+    },
+    setError(state, error) {
+      state.error = error
+    },
 
   },
   actions: {
+    async register({dispatch}, {email, password, name, lastName, country, date}) {
+      await firebase.auth().createUserWithEmailAndPassword(email, password)
+      const uid = await dispatch('getUid')
+      await firebase.database().ref(`/users/${uid}/info`).set({
+        name,
+        country,
+        lastName,
+        date
+      })
+     
+    },
+    getUid() {
+      const user = firebase.auth().currentUser
+      return user ? user.uid : null
+    },
+    async login({commit}, {email, password}) {
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password)
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
+    },
+    async logout({commit}) {
+      await firebase.auth().signOut()
+      await commit('clearInfo')
+    },
     async fetchShoes({commit}) {
         const products = (await firebase.database().ref(`/shoes/men`).once('value')).val()
         const cats = []
@@ -111,6 +150,17 @@ export default new Vuex.Store({
         throw e
       } 
     },
+    async fetchInfo({dispatch, commit}) {
+      try {
+        const uid = await dispatch('getUid')
+        const info = (await firebase.database().ref(`/users/${uid}/info`).once('value')).val()
+        commit('setInfo', info)
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
+    }
+    
     
     
   },
@@ -121,6 +171,8 @@ export default new Vuex.Store({
     getTodoById: (state) => (id) => {
       return state.cart.find(todo => todo.id === id)
     },
+    info: s => s.info,
+    error: s => s.error
 
   }
 })

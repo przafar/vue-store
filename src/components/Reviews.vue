@@ -1,10 +1,14 @@
 <template>
-  <div class="accordion"> 
-    <button @click="review" type="button" class="accordion__button">Reviews ({{ quantity }}) <i class="fas fa-chevron-down"></i></button>
+  <div class="accordion">
+    <button @click="showen" type="button" class="accordion__button">Reviews ({{ quantity + count }}) <i class="fas fa-chevron-down"></i></button>
+    
     <div class="accordion__content"  v-show="comment">
+      <div class="average-rate">
+        <star-rating :increment="0.01" :fixed-points="2" v-bind:star-size="28" active-color="#000" text-class="d-none" read-only :rating="average"></star-rating>     
+      </div>    
       <ul>
         <Modalreview @created="addNewComment"  />
-        <li class="review-rate"  v-for="rev in comments" :key="rev.id">
+        <li class="review-rate"  v-for="rev in comments.slice(n, 3)" :key="rev.id">
           <p>{{ rev.name }} <span>{{ rev.date }}</span></p>
           <star-rating v-bind:star-size="18" active-color="#000" text-class="d-none" read-only :rating="rev.rate"></star-rating>
 
@@ -15,41 +19,58 @@
           <p>{{ rev.name }} <span>{{ rev.date }}</span></p>
           <star-rating v-bind:star-size="18" active-color="#000" text-class="d-none" read-only :rating="rev.rate"></star-rating>
 
-          <h6>{{ rev.message }}</h6>
-          
+          <h6>{{ rev.message }}</h6>         
         </li>
-        
-        
+        <full-review />
       </ul>
     </div>
-    
   </div>
 </template>
 <script>
 import Modalreview from '../components/ModalReview'
 import StarRating from 'vue-star-rating'
+import FullReview from './fullReview'
 
 export default {
+  
   props: ['comments'],
   data: () => ({
     comment: false,
-    reviews: []
+    reviews: [],
+    review: [],
+    count: 0
+
   }),
+  async mounted() {
+    const id = this.$route.params.id
+    this.review = await this.$store.dispatch('fetchComment', id)
+  },
   methods: {
-    review() {
+    showen() {
       this.comment = !this.comment
+      this.$emit('notify')
     },
     addNewComment(real) {
       this.reviews.push(real)
+      this.count++
     },
   },
   computed: {
     quantity() {
-      return this.comments.length
+      return this.review.length
+    },
+    average() {
+      let rate = 0;
+      this.review.forEach(e => {
+          rate += e.rate / this.review.length
+      });
+      return rate
     }
+    
+
   },
   components: {
-    Modalreview, StarRating
+    Modalreview, StarRating, FullReview
   }
 }
 </script>
@@ -99,6 +120,21 @@ export default {
     font-weight: 500;
     font-family: Arial, Helvetica, sans-serif;
     margin-top: 15px;
+  }
+  .average-rate {
+    margin-left: 0px;
+    margin-bottom: 20px;
+  }
+  @media screen and (min-width: 370px) and (max-width: 1200px) {
+    .accordion__content {
+      padding-left: 0px;
+    }
+    .accordion__button {
+      padding-left: 0;
+    }
+    .average-rate {
+      margin-left: 0;
+    }
   }
   
 </style>

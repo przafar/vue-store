@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Menubar/>
+    <Menubar class="fixedli"/>
     <div class="container">
       
       <div class="box row">
@@ -53,6 +53,9 @@
 <script>
 import Menubar from '../components/menuBar'
 export default {
+  metaInfo: {
+    title: 'Orders'
+  },
   data: () => ({
     selected: [],
     quantityArray: [],
@@ -95,9 +98,14 @@ export default {
 </script>
 
 <style scoped>
+.fixedli {
+    position: fixed;
+    width: 100%;
+    top: 55px;
+    z-index: 1;
+  }
   .box {
     display: flex;
-    margin-top: 30px;
   }
   .box ul{
     display: flex;
@@ -111,7 +119,6 @@ export default {
   }
   .modal-information {
     margin-left: 40px;
-  
     display: inline-block;
 
   }
@@ -124,12 +131,18 @@ export default {
     margin-top: 10px;
   }
   .remove {
-    margin-left: 30px;
-    padding-top: 20px;
+    position: absolute;
+    right: 10px;  
+    padding-right: 20px;
+    padding-top: 20px;  
   }
   .remove i {
     font-size: 22px;
     color: rgb(192, 29, 29);
+    
+  }
+  .basket {
+    margin-top: 160px;
   }
   .basket ul {
     border-bottom: 0.4px solid grey;
@@ -139,7 +152,8 @@ export default {
   }
   .value {
     padding-left: 30px;
-    margin-bottom: 103px;
+    margin-bottom: 102px;
+    margin-top: 180px;
   }
   .pay {
     width: 280px;
@@ -166,4 +180,20 @@ export default {
     color: #757575;
     font-weight: 400;
   }
+  @media screen and (min-width: 370px) and (max-width: 1200px) {
+    .modal-post {
+      padding-left: 0px;
+    }
+    .modal-post li {
+      margin-left: 10px;
+    }
+    .remove {
+      padding-right: 0;
+      padding-top: 30px;
+    }
+    .options {
+      margin-bottom: 20px;
+    }
+  }
+
 </style>

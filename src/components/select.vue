@@ -19,4 +19,8 @@ export default {
     font-size: 18px;
     padding-left: 5px;
   }
+  @media screen and (min-width: 370px) and (max-width: 1200px) {
+    
+  }
+  
 </style>

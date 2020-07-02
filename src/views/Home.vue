@@ -1,9 +1,8 @@
 <template>
     <div> 
-        <Menubar class="absolute"/>
+        <Menubar class="fixedli"/>
         <div class="container">
-            <div class="row">
-                
+            <div class="row">  
                 <Loader class="loading" v-if="loading"/>
                 <ul class="allposts">
                     <li v-for="shoe in shoes" :key="shoe.id" :value="shoe.id">
@@ -31,6 +30,9 @@ import Loader from '../components/Loaders'
 import Menubar from '../components/menuBar'
 
 export default {
+    metaInfo: {
+    title: `Home`
+    },
     data: () => ({
         shoes: [],
         loading: true
@@ -38,6 +40,7 @@ export default {
     async mounted() {
         this.shoes = await this.$store.dispatch('fetchShoes')
         this.loading = false
+
     },
     computed: {
         
@@ -49,9 +52,14 @@ export default {
 }
 </script>
 <style scoped>
+    .fixedli {
+        position: fixed;
+        width: 100%;
+        top: 55px;
+    }
     .allposts {
         padding-left: 0px;
-        margin-top: 40px;
+        margin-top: 120px;
     }
     .allposts li {
         display: inline;
@@ -86,12 +94,12 @@ export default {
     }
     .loading {
        margin-left: 46%;
-       margin-top: 150px;
-       margin-bottom: 150px;
+       margin-top: 330px;
+       margin-bottom: 300px;
     }
     @media screen and (min-width: 370px) and (max-width: 1200px) {
         .shoes {
-            margin-left: 30px;
+            margin-left: 40px;
         }
     }
     

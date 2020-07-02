@@ -24,7 +24,10 @@ export default {
 </script>
 <style scoped>
   .store i {
-    font-size: 22px;
+    font-size: 20px;
+    position: absolute;
+    right: 170px;
+    top: -5px;
   }
   .store p {
     border: 1px solid orange;
@@ -33,19 +36,12 @@ export default {
     color: white;
     border-radius: 50%;
     font-size: 12px;
-    margin-top: -10px;
     margin-left: 0px;
-    position: relative;
-    
+    width: 20px; 
   }
   .store {
-    float: right;
-    margin-right: 50px;
-    margin-top: -55px;
     display: block;
-  }
-  .store i {
-    font-size: 22px;
+    cursor: pointer;
   }
   .store p {
     border: 1px solid orange;
@@ -54,8 +50,8 @@ export default {
     color: white;
     border-radius: 50%;
     font-size: 12px;
-    margin-top: -10px;
-    margin-left: 0px;
+    top: -10px;
+    right: -6px;
     position: relative;
     
   }

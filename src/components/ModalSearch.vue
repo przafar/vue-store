@@ -107,7 +107,7 @@ export default {
     height: 40px;
     padding-left: 25px;
     float: right;
-    margin-top: 17px;
+    margin-top: 15px;
     margin-right: 20px;
 
   }
@@ -115,10 +115,10 @@ export default {
     position: absolute;
     background-color: #f7f7f7;
     border: 1px solid black;
-    right: 0;
-    top: 141px;
-    width: 82%;
-    height: 100%;
+    right: 15px;
+    top: 58.5px;
+    width: 1000px;
+    
     margin-bottom: 20px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     z-index: 10;
@@ -165,14 +165,14 @@ export default {
   .input-button {
     position: absolute;
     right: 28px;
-    top: 23.5px;
+    top: 20px;
     border: none;
     background-color: white;
     outline: none;
   }
   .searchbtn {
     position: absolute;
-    top: 23px;
+    top: 21px;
     right: 198px;
   }
   .searchbtn i {

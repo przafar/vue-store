@@ -11,6 +11,8 @@ import VueFuse from 'vue-fuse'
 import VBodyScrollLock from 'v-body-scroll-lock'
 import StarRating from 'vue-star-rating'
 import Paginate from 'vuejs-paginate'
+import ScrollFixedHeader from 'vuejs-scroll-fixed-header'
+import VueMeta from 'vue-meta'
 
 
 
@@ -26,7 +28,10 @@ Vue.use(VBodyScrollLock)
 Vue.use(BootstrapVue)
 Vue.use(VueResource)
 Vue.use(IconsPlugin)
+Vue.use(VueMeta)
 Vue.component('Paginate', Paginate)
+Vue.use(ScrollFixedHeader)
+
 Vue.config.productionTip = false
 
 

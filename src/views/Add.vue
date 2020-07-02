@@ -1,8 +1,9 @@
 <template>
   <div>
-    <Menubar/>
+    <Menubar class="fixedli"/>
     <div class="container">
       <div class="row">
+        <Loader class="loading" v-if="loading"/>
         <ul class="hider">
           <form v-on:submit.prevent>
               <div class="addside row">
@@ -45,20 +46,14 @@
                     <h6>{{ shoe.about }}</h6>  
                   </div>
                   <button v-on:click="submitHandler" type="submit" class="btn add-cart">Add to Cart</button>
-                  <Reviews v-bind:comments="reviews" />
-                  <!-- <Paginate 
-                            :page-count="pageCount"
-                            :click-handler="pageChangeHandler"
-                            :prev-text="'Prev'"
-                            :next-text="'Next'"
-                            :container-class="'pagination'"
-                            :page-class="'page-item'"
-        
-                  /> -->
+                  <Reviews :comments="reviews" />
+                  
                 </li>
                 <div class="view">
                   <p>The Nike Air Force 1 GORE-TEX Losaew retools the classic Air Force 1 with a street-approved design that meets the standards of GORE-TEX waterproof technology. It features water-wicking flat laces, a GORE-TEX bootie and GORE-TEX branding on the heel.</p>
                 </div>
+                <Slider />
+
               </div>
           </form>
         </ul>  
@@ -71,12 +66,14 @@
 import Select from '../components/select'
 import Menubar from '../components/menuBar'
 import Reviews from '../components/Reviews'
-
-
+import Loader from '../components/Loaders'
+import Slider from '../components/Slider'
 
 export default {
+  metaInfo: {
+    title: `Shoe`
+  },
   name: 'Add',
-
   data: () => ({
     shoe: [],
     selected: [],
@@ -87,12 +84,16 @@ export default {
     categories: [],
     selectedVariant: 1,
     reviews: [],
-    items: []
+    loading: true
+
+   
   }),     
   async mounted() {
     const id = this.$route.params.id
-    this.shoe = await this.$store.dispatch('fetchShoesById', id)
     this.reviews = await this.$store.dispatch('fetchComment', id)
+    this.shoe = await this.$store.dispatch('fetchShoesById', id)
+    this.loading = false
+    
     this.categories = this.shoe.categoris
     for (let i = 1; i <= 10; i++) {
       this.quantityArray.push(i);
@@ -100,11 +101,8 @@ export default {
     if (this.$props.basket.quantity > 1) {
       this.selected = this.$props.basket.quantity;
     }
+    
 
-    
-   
-    
-   
   },
 
   computed: {
@@ -114,9 +112,11 @@ export default {
     basket() {
       return this.$store.getters.getTodoById(this.shoe.id)
     },
+   
     
     
   },
+  
   methods: {
     submitHandler() {
       const addShoes = {
@@ -130,8 +130,7 @@ export default {
       }
       this.$store.commit('addToCart', addShoes)
       this.$store.commit('saveData')
-     
-    },
+    }, 
     
     updateProduct(image, front, shown, photo, back, side, pic) {
       this.shoe.image = image
@@ -142,61 +141,41 @@ export default {
       this.shoe.photo = photo
       this.shoe.pic = pic
     },
-     pageChangeHandler() {
-       
-    }
-
-    // submitHandler() {
-    //     this.m1()
-    // },
-    // async m1() {
-    //   // const updateShoes = {
-    //   //   name: this.shoe.name,
-    //   //   cost: this.shoe.cost,
-    //   //   image: this.shoe.image,
-    //   //   quantity: this.basket.quantity+=1,
-    //   //   id: this.shoe.id
-    //   // }
-    //   // const addShoes = {
-    //   //   name: this.shoe.name,
-    //   //   cost: this.shoe.cost,
-    //   //   image: this.shoe.image,
-    //   //   quantity: this.quantity,
-    //   //   id: this.shoe.id
-    //   // }
-    //   // if(this.basket.name === this.shoe.name) { 
-    //   //   await this.$store.dispatch('updateShoes', updateShoes)  
-    //   // } else {
-    //   //   await this.$store.dispatch('updateShoes', addShoes)
-    //   // } 
-    //   this.$emit('created') 
-    // },
+   
   },
   components: {
-    Menubar, Select, Reviews, 
+    Menubar, Select, Reviews, Loader, Slider
   }
 }
 
 </script>
 
 <style scoped>
+  .fixedli {
+    position: fixed;
+    width: 100%;
+    top: 55px;
+    z-index: 1;
+  }
   .addside {
-    margin-top: 20px;
+    margin-top: 150px;
   }
   .addside li {
     display: block;
+    padding: 0;
   }
   .addphoto img {
-    width: 320px;
+    width: 360px;
     margin-bottom: 35px;
   }
   .view {
     margin-top: 40px;
+    margin-bottom: 40px;
     text-align: center;
   }
   .loading {
     margin-left: 46%;
-    margin-top: 150px;
+    margin-top: 360px;
     margin-bottom: 150px;
   }
   .add-cart {
@@ -262,6 +241,7 @@ export default {
     text-decoration: none;
     color: #757575;
     font-size: 16px;
+    padding-right: 50px;
     font-family: Arial, Helvetica, sans-serif;
   }
   .select-size p {
@@ -271,18 +251,20 @@ export default {
   }
   .categories {
     display: flex;
+    width: 100%;
     margin-bottom: 30px;
     padding-left: 15px;
   }
   .categories li {
-    padding-right: 8px;
-    padding-top: 8px;
+    padding-right: 10px;
+    padding-top: 10px;
   }
   .categories img {
     width: 69px;
   }
   .shown {
     margin-top: 10px;
+    padding-right: 50px;
   }
   .shown p {
     font-size: 16px;
@@ -293,10 +275,17 @@ export default {
   .shown h6 {
     margin-top: 30px;
     margin-bottom: 30px;
-  } 
+  }
   @media screen and (min-width: 370px) and (max-width: 1200px) {
     ul {
-      padding: 0 15px;
+      padding: 0 30px;
+    }
+    .categories {
+      margin-right: 10px;
+    }
+    .view {
+      width: 90%;
+      padding-left: 10px;
     }
   }
   

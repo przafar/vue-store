@@ -55,9 +55,6 @@ export default {
     show () {
       this.$modal.show('hello-world');
     },
-    hide () {
-      this.$modal.hide('hello-world');
-    },
     submitHandler() {
       const message = {
         name: this.name,
@@ -72,6 +69,7 @@ export default {
       this.message = ''
       this.rating = ''
       this.$v.$reset()
+      this.$modal.hide('hello-world');
     }
 
   },

@@ -7,6 +7,8 @@ import Store from '../views/store.vue'
 import Admin from '../views/Admin.vue'
 import ProductEdit from '../assets/ProductEdit.vue'
 import ProductCreate from '../assets/ProductCreate.vue'
+import Profile from '../views/Profile.vue'
+
 
 
 
@@ -48,10 +50,24 @@ Vue.use(VueRouter)
     name: 'ProductCreate',
     component: ProductCreate,
   },
+  {
+    path: '/Profile',
+    name: 'Profile',
+    meta: {layout: 'Profile', auth: true},
+    component: Profile,
+  },
 ]
 
+
+
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'hash', 
+  scrollBehavior(){
+    return {
+        x: 0,
+        y: 0
+    }
+  },
   base: process.env.BASE_URL,
   routes
 })
